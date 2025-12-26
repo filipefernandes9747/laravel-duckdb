@@ -1,5 +1,6 @@
-# Laravel DuckDB Driver
+![Thumbnail](assets/thumbnail.png)
 
+# Laravel DuckDB Driver
 A production-ready Laravel database driver for DuckDB, powered by `satur/duckdb-auto`. This package allows you to query DuckDB databases using Laravel's powerful Query Builder for analytical (OLAP) workloads.
 
 ## Requirements
