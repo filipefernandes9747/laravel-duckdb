@@ -1,5 +1,5 @@
 {
-    "name": "filipefernandes9747/laravel-duckdb",
+    "name": "filipefernandes/laravel-duckdb",
     "description": "A Laravel database driver for DuckDB.",
     "keywords": [
         "laravel",
@@ -13,7 +13,7 @@
     "authors": [
         {
             "name": "Filipe Fernandes",
-            "email": "email@example.com"
+            "email": "filipe9747@gmail.com"
         }
     ],
     "require": {
