@@ -28,7 +28,7 @@ Add the connection configuration to your `config/database.php` file:
     
     'duckdb' => [
         'driver' => 'duckdb',
-        'database' => storage_path('duckdb/analytics.db'), // Path to DB file or ':memory:'
+        'database' => env('DUCKDB_DB_FILE', storage_path('duckdb/analytics.db')),
         'prefix' => '',
         'read_only' => false,
     ],
@@ -61,10 +61,33 @@ DuckDB shines at analytics. You can query Parquet, CSV, or JSON files directly.
 $results = DB::connection('duckdb')
     ->select("SELECT * FROM 'path/to/data.parquet' LIMIT 10");
 
-// Aggregating from CSV
-$stats = DB::connection('duckdb')
-    ->select("SELECT count(*) FROM read_csv_auto('path/to/data.csv')");
+
+### Examples
+
+```php
+use Illuminate\Support\Facades\DB;
+
+// 1. Get all users
+$users = DB::connection('duckdb')->table('users')->get();
+
+// 2. Aggregate count
+$count = DB::connection('duckdb')->table('users')->count();
+
+// 3. Conditional Fetch with Bindings
+$user = DB::connection('duckdb')
+    ->table('users')
+    ->where('id', 1)
+    ->first();
+
+// 4. Raw SQL Select
+$results = DB::connection('duckdb')->select("SELECT * FROM users WHERE email LIKE ?", ['%example.com']);
+
+// 5. Analytical Query (DuckDB syntax)
+// e.g. Extract hour from timestamp
+$hourly = DB::connection('duckdb')
+    ->select("SELECT date_part('hour', created_at) as hour, count(*) as count FROM users GROUP BY 1");
 ```
+
 
 ### Limitations
 

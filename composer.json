@@ -1,5 +1,5 @@
 {
-    "name": "laravel-duckdb/duckdb-driver",
+    "name": "filipefernandes9747/laravel-duckdb",
     "description": "A Laravel database driver for DuckDB.",
     "keywords": [
         "laravel",
@@ -18,9 +18,9 @@
     ],
     "require": {
         "php": "^8.2",
-        "illuminate/database": "^10.0|^11.0",
-        "illuminate/support": "^10.0|^11.0",
-        "satur/duckdb-auto": "^0.1"
+        "illuminate/database": "^10.0|^11.0|^12.0",
+        "illuminate/support": "^10.0|^11.0|^12.0",
+        "satur.io/duckdb-auto": "^2.0"
     },
     "require-dev": {
         "orchestra/testbench": "^8.0|^9.0",
@@ -29,6 +29,11 @@
     "autoload": {
         "psr-4": {
             "LaravelDuckDB\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LaravelDuckDB\\Tests\\": "tests/"
         }
     },
     "extra": {
@@ -42,7 +47,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "satur.io/duckdb-auto": true
         }
     },
     "minimum-stability": "dev",

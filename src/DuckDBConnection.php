@@ -5,7 +5,7 @@ namespace LaravelDuckDB;
 use Illuminate\Database\Connection;
 use LaravelDuckDB\Query\Grammar as QueryGrammar;
 use LaravelDuckDB\Query\Processor;
-use Satur\DuckDB\DuckDB;
+use Saturio\DuckDB\DuckDB;
 use LaravelDuckDB\Exceptions\DuckDBException;
 use DateTimeInterface;
 
@@ -14,14 +14,14 @@ class DuckDBConnection extends Connection
     /**
      * The DuckDB connection handler.
      *
-     * @var \Satur\DuckDB\DuckDB
+     * @var \Saturio\DuckDB\DuckDB
      */
     protected $connection;
 
     /**
      * Create a new database connection instance.
      *
-     * @param  \Satur\DuckDB\DuckDB  $connection
+     * @param  \Saturio\DuckDB\DuckDB  $connection
      * @param  string  $database
      * @param  string  $tablePrefix
      * @param  array  $config
@@ -41,7 +41,16 @@ class DuckDBConnection extends Connection
      */
     protected function getDefaultQueryGrammar()
     {
-        return $this->withTablePrefix(new QueryGrammar);
+        $grammar = new QueryGrammar($this);
+        
+        // Laravel 11+ Grammars might require connection instance
+        if (method_exists($grammar, 'setConnection')) {
+            $grammar->setConnection($this);
+        }
+
+        $grammar->setTablePrefix($this->tablePrefix);
+
+        return $grammar;
     }
 
     /**
@@ -73,10 +82,14 @@ class DuckDBConnection extends Connection
 
             $result = $this->connection->query($sql);
             
-            // Assuming the satur/duckdb-auto driver's query result has a fetchAll method or similar.
-            // Adjust based on specific library behavior if known differently.
-            // Common pattern for these FFI wrappers is:
-            return $result->fetchAll();
+            // 'fetchAll' method does not exist on ResultSet.
+            // Using iterator_to_array on rows() generator.
+            $rows = iterator_to_array($result->rows());
+            $columns = iterator_to_array($result->columnNames());
+            
+            return array_map(function ($row) use ($columns) {
+                return array_combine($columns, $row);
+            }, $rows);
         });
     }
 
@@ -157,7 +170,7 @@ class DuckDBConnection extends Connection
      * @param  mixed  $value
      * @return string|int|float
      */
-    protected function escape($value)
+    public function escape($value, $binary = false)
     {
         if (is_null($value)) {
             return 'NULL';
