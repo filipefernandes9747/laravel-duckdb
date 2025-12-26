@@ -35,6 +35,21 @@ class DuckDBConnection extends Connection
     }
 
     /**
+     * Begin a fluent query against a database table or file.
+     *
+     * @param  string  $path
+     * @param  string|null  $as
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function file($path, $as = null)
+    {
+        // Wrap in single quotes for DuckDB file paths
+        $wrappedPath = "'".str_replace("'", "''", $path)."'";
+        
+        return $this->table(new \Illuminate\Database\Query\Expression($wrappedPath), $as);
+    }
+
+    /**
      * Get the default query grammar instance.
      *
      * @return \LaravelDuckDB\Query\Grammar

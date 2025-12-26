@@ -59,4 +59,15 @@ class ConnectionTest extends TestCase
         $this->assertEquals('TRUE', $method->invoke($connection, true));
         $this->assertEquals('FALSE', $method->invoke($connection, false));
     }
+
+    public function test_it_proxies_file_to_table()
+    {
+        $duckDB = Mockery::mock(DuckDB::class);
+        $connection = new DuckDBConnection($duckDB);
+
+        $query = $connection->file('data.parquet');
+
+        $this->assertInstanceOf(\Illuminate\Database\Query\Builder::class, $query);
+        $this->assertEquals("select * from 'data.parquet'", $query->toSql());
+    }
 }

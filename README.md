@@ -37,9 +37,24 @@ Add the connection configuration to your `config/database.php` file:
 ],
 ```
 
+
 ## Usage
 
 You can use the `DB` facade to interact with DuckDB.
+
+### Querying Files
+
+You can query files directly (Parquet, CSV, JSON) without pre-configuring tables using the `file()` helper:
+
+```php
+use Illuminate\Support\Facades\DB;
+
+// Query a Parquet file
+$users = DB::connection('duckdb')
+    ->file('storage/app/data.parquet')
+    ->where('age', '>', 25)
+    ->get();
+```
 
 ### Basic Queries
 
