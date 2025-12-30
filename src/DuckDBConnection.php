@@ -50,6 +50,41 @@ class DuckDBConnection extends Connection
     }
 
     /**
+     * Get all records from a file.
+     *
+     * @param  string  $path
+     * @return \Illuminate\Support\Collection
+     */
+    public function all($path)
+    {
+        return $this->file($path)->get();
+    }
+
+    /**
+     * Execute a query and print the result using DuckDB's print method.
+     *
+     * @param  string  $query
+     * @param  array  $bindings
+     * @return void
+     */
+    public function print($query, $bindings = [])
+    {
+        $sql = $this->interpolateQuery($query, $bindings);
+        $result = $this->connection->query($sql);
+        $result->print();
+    }
+
+    /**
+     * Get the underlying DuckDB connection.
+     *
+     * @return \Saturio\DuckDB\DuckDB
+     */
+    public function getConnection()
+    {
+        return $this->connection;
+    }
+
+    /**
      * Get the default query grammar instance.
      *
      * @return \LaravelDuckDB\Query\Grammar
@@ -161,7 +196,7 @@ class DuckDBConnection extends Connection
      * @param  array  $bindings
      * @return string
      */
-    protected function interpolateQuery($query, $bindings)
+    public function interpolateQuery($query, $bindings)
     {
         if (empty($bindings)) {
             return $query;

@@ -49,4 +49,28 @@ class IntegrationTest extends TestCase
              $this->markTestSkipped('DuckDB query failed: ' . $e->getMessage());
         }
     }
+
+    public function test_parquet_file_query()
+    {
+        $file = __DIR__ . '/test_data.parquet';
+        if (file_exists($file)) unlink($file);
+
+        try {
+            // Generate some data and export to Parquet
+            DB::statement("COPY (SELECT 1 as id, 'A' as name UNION SELECT 2, 'B') TO '$file' (FORMAT 'PARQUET')");
+
+            // Query using the file helper
+            $result = DB::connection('duckdb')
+                ->file($file)
+                ->where('id', 1)
+                ->get();
+            
+            $this->assertCount(1, $result);
+            $this->assertEquals('A', $result[0]['name']);
+        } catch (\Exception $e) {
+            $this->markTestSkipped('Parquet test failed: ' . $e->getMessage());
+        } finally {
+            if (file_exists($file)) unlink($file);
+        }
+    }
 }

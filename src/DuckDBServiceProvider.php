@@ -33,6 +33,18 @@ class DuckDBServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        \Illuminate\Database\Query\Builder::macro('print', function () {
+            $connection = $this->getConnection();
+            
+            if ($connection instanceof DuckDBConnection) {
+                $sql = $this->toSql();
+                $bindings = $this->getBindings();
+                $interpolated = $connection->interpolateQuery($sql, $bindings);
+                $result = $connection->getConnection()->query($interpolated);
+                $result->print();
+            } else {
+                throw new \BadMethodCallException('print() is only available for DuckDB connections');
+            }
+        });
     }
 }

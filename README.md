@@ -54,6 +54,15 @@ $users = DB::connection('duckdb')
     ->file('storage/app/data.parquet')
     ->where('age', '>', 25)
     ->get();
+
+// Or get all records from a file
+$allUsers = DB::connection('duckdb')->all('storage/app/data.parquet');
+
+// Print formatted output (useful for debugging)
+DB::connection('duckdb')->print("SELECT * FROM 'storage/app/data.parquet' LIMIT 10");
+
+// Or chain print() on a query builder
+DB::connection('duckdb')->file('storage/app/data.parquet')->print();
 ```
 
 ### Basic Queries
