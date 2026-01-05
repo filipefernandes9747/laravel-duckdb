@@ -44,8 +44,8 @@ class DuckDBConnection extends Connection
     public function file($path, $as = null)
     {
         // Wrap in single quotes for DuckDB file paths
-        $wrappedPath = "'".str_replace("'", "''", $path)."'";
-        
+        $wrappedPath = "'" . str_replace("'", "''", $path) . "'";
+
         return $this->table(new \Illuminate\Database\Query\Expression($wrappedPath), $as);
     }
 
@@ -85,6 +85,18 @@ class DuckDBConnection extends Connection
     }
 
     /**
+     * Insert a single row into a file.
+     *
+     * @param  string  $path
+     * @param  array  $data
+     * @return bool
+     */
+    public function create($path, array $data)
+    {
+        return $this->file($path)->insert($data);
+    }
+
+    /**
      * Get the default query grammar instance.
      *
      * @return \LaravelDuckDB\Query\Grammar
@@ -92,7 +104,7 @@ class DuckDBConnection extends Connection
     protected function getDefaultQueryGrammar()
     {
         $grammar = new QueryGrammar($this);
-        
+
         // Laravel 11+ Grammars might require connection instance
         if (method_exists($grammar, 'setConnection')) {
             $grammar->setConnection($this);
@@ -131,12 +143,12 @@ class DuckDBConnection extends Connection
             $sql = $this->interpolateQuery($query, $bindings);
 
             $result = $this->connection->query($sql);
-            
+
             // 'fetchAll' method does not exist on ResultSet.
             // Using iterator_to_array on rows() generator.
             $rows = iterator_to_array($result->rows());
             $columns = iterator_to_array($result->columnNames());
-            
+
             return array_map(function ($row) use ($columns) {
                 return array_combine($columns, $row);
             }, $rows);
@@ -163,7 +175,7 @@ class DuckDBConnection extends Connection
 
             // DuckDB FFI wrapper might not easy return affected rows depending on implementation.
             // For now, return 0 or look for a specific method if available in the future.
-            return 0; 
+            return 0;
         });
     }
 
@@ -233,7 +245,7 @@ class DuckDBConnection extends Connection
         if (is_bool($value)) {
             return $value ? 'TRUE' : 'FALSE';
         }
-        
+
         if ($value instanceof DateTimeInterface) {
             $value = $value->format('Y-m-d H:i:s');
         }

@@ -63,6 +63,19 @@ DB::connection('duckdb')->print("SELECT * FROM 'storage/app/data.parquet' LIMIT 
 
 // Or chain print() on a query builder
 DB::connection('duckdb')->file('storage/app/data.parquet')->print();
+
+// Insert a single row into a file
+DB::connection('duckdb')->create('storage/app/data.parquet', [
+    'id' => 1,
+    'name' => 'John Doe',
+    'email' => 'john@example.com'
+]);
+
+// Insert multiple rows into a file
+DB::connection('duckdb')->insertInto('storage/app/data.parquet', [
+    ['id' => 1, 'name' => 'John', 'email' => 'john@example.com'],
+    ['id' => 2, 'name' => 'Jane', 'email' => 'jane@example.com'],
+]);
 ```
 
 ### Basic Queries
