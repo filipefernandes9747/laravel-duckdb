@@ -17,7 +17,7 @@ A production-ready Laravel database driver for DuckDB, powered by `satur/duckdb-
 1. Install via Composer:
 
 ```bash
-composer require laravel-duckdb/duckdb-driver
+composer require filipefernandes/laravel-duckdb
 ```
 
 2. Configuration
