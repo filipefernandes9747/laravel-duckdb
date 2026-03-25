@@ -1,6 +1,7 @@
 {
     "name": "filipefernandes/laravel-duckdb",
     "description": "A Laravel database driver for DuckDB.",
+    "version": "1.0.0",
     "keywords": [
         "laravel",
         "duckdb",
@@ -50,6 +51,10 @@
             "php-http/discovery": true,
             "satur.io/duckdb-auto": true
         }
+    },
+    "scripts": {
+        "post-install-cmd": "\\Saturio\\DuckDB\\CLib\\Installer::install",
+        "post-update-cmd": "\\Saturio\\DuckDB\\CLib\\Installer::install"
     },
     "minimum-stability": "dev",
     "prefer-stable": true
