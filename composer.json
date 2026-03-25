@@ -19,6 +19,7 @@
     ],
     "require": {
         "php": "^8.2",
+        "ext-zip": "*",
         "illuminate/database": "^10.0|^11.0|^12.0",
         "illuminate/support": "^10.0|^11.0|^12.0",
         "satur.io/duckdb-auto": "^2.0"
@@ -51,10 +52,6 @@
             "php-http/discovery": true,
             "satur.io/duckdb-auto": true
         }
-    },
-    "scripts": {
-        "post-install-cmd": "\\Saturio\\DuckDB\\CLib\\Installer::install",
-        "post-update-cmd": "\\Saturio\\DuckDB\\CLib\\Installer::install"
     },
     "minimum-stability": "dev",
     "prefer-stable": true

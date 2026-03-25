@@ -37,6 +37,47 @@ Add the connection configuration to your `config/database.php` file:
 ],
 ```
 
+## Auto-Installer
+
+This package automatically downloads and installs the DuckDB native binary and FFI header when your application boots — **no manual setup required**.
+
+On first boot it will:
+
+1. Create `storage/duckdb/` (if it doesn't exist)
+2. Download the correct native library for your OS from the [DuckDB GitHub Releases](https://github.com/duckdb/duckdb/releases)
+3. Download the `duckdb.h` FFI header
+4. Set the required environment variables (`DUCKDB_LIB_PATH`, `DUCKDB_HEADER_PATH`) at runtime
+
+Subsequent boots detect the files are already present and **skip the download** (idempotent).
+
+### Supported platforms
+
+| OS | Architecture | Library |
+|---|---|---|
+| Windows | x86_64 | `duckdb.dll` |
+| Linux | x86_64 | `libduckdb.so` |
+| Linux | aarch64 | `libduckdb.so` |
+| macOS | Universal | `libduckdb.dylib` |
+
+### Configuration
+
+Publish the config file to override defaults:
+
+```bash
+php artisan vendor:publish --tag=duckdb-config
+```
+
+Available `.env` variables:
+
+```env
+DUCKDB_AUTO_INSTALL=true          # Set to false to disable auto-installer
+DUCKDB_INSTALL_PATH=/custom/path  # Override install directory (default: storage/duckdb)
+DUCKDB_VERSION=1.2.1              # Pin a specific DuckDB release version
+```
+
+> [!NOTE]
+> `ext-zip` must be enabled in your `php.ini` (it is bundled with PHP by default on most platforms).
+> If the installer fails (e.g. no internet access), it logs the error and **does not crash the application** — allowing you to manage binaries manually.
 
 ## Usage
 
