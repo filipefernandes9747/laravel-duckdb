@@ -21,7 +21,7 @@ class DuckDBInstaller
     public const LIB_MACOS   = 'libduckdb.dylib';
 
     // Header filename expected by the FFI binding
-    public const HEADER_FILENAME = 'duckdb.h';
+    public const HEADER_FILENAME = 'duckdb-ffi.h';
 
     protected string $installPath;
     protected string $version;
@@ -81,6 +81,7 @@ class DuckDBInstaller
         $vars = [
             'DUCKDB_LIB_PATH'    => $this->installPath,
             'DUCKDB_HEADER_PATH' => $this->installPath,
+            'DUCKDB_PHP_PATH'    => $this->installPath,
         ];
 
         foreach ($vars as $key => $value) {
