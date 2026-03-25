@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 
 ### Chores
 
+- **release:** 1.0.0 ([6761c34](https://github.com/filipefernandes9747/laravel-duckdb/commit/6761c341012d68df65238d69b8c2f6c4d091eee2))
 - **release:** 0.1.0 ([3b2bfae](https://github.com/filipefernandes9747/laravel-duckdb/commit/3b2bfae24cb54e6452b86d6eee63e5e749f18bf2))
 - **release:** 0.1.0 ([d8601bc](https://github.com/filipefernandes9747/laravel-duckdb/commit/d8601bcf2d619354ecb5962e811de5fa5f12ec0b))
 - **release:** 0.0.2 ([c14044f](https://github.com/filipefernandes9747/laravel-duckdb/commit/c14044fc5d28facd9b6d9ad3d81aecc33e6ec8a4))
