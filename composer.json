@@ -1,7 +1,7 @@
 {
     "name": "filipefernandes/laravel-duckdb",
     "description": "A Laravel database driver for DuckDB.",
-    "version": "1.0.0",
+    "version": "0.0.2",
     "keywords": [
         "laravel",
         "duckdb",
