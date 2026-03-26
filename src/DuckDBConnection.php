@@ -5,7 +5,7 @@ namespace LaravelDuckDB;
 use Illuminate\Database\Connection;
 use LaravelDuckDB\Query\Grammar as QueryGrammar;
 use LaravelDuckDB\Query\Processor;
-use Saturio\DuckDB\DuckDB;
+use LaravelDuckDB\Internal\DuckDB;
 use LaravelDuckDB\Exceptions\DuckDBException;
 use DateTimeInterface;
 
@@ -14,14 +14,14 @@ class DuckDBConnection extends Connection
     /**
      * The DuckDB connection handler.
      *
-     * @var \Saturio\DuckDB\DuckDB
+     * @var \LaravelDuckDB\Internal\DuckDB
      */
     protected $connection;
 
     /**
      * Create a new database connection instance.
      *
-     * @param  \Saturio\DuckDB\DuckDB  $connection
+     * @param  \LaravelDuckDB\Internal\DuckDB  $connection
      * @param  string  $database
      * @param  string  $tablePrefix
      * @param  array  $config

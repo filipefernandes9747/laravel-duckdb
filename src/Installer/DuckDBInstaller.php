@@ -57,6 +57,7 @@ class DuckDBInstaller
         $this->ensureDirectoryExists($this->installPath);
         $this->downloadLibrary();
         $this->downloadHeader();
+        $this->cleanHeader();
         $this->configureEnvironment();
 
         Log::info('[DuckDB Installer] Installation complete.', [
@@ -127,6 +128,48 @@ class DuckDBInstaller
         $this->downloadFile($url, $dest);
 
         Log::debug('[DuckDB Installer] Header saved.', ['file' => $dest]);
+    }
+
+    /**
+     * Cleans the downloaded duckdb.h to make it compatible with PHP FFI.
+     */
+    protected function cleanHeader(): void
+    {
+        $path = $this->headerPath();
+        if (!file_exists($path)) {
+            return;
+        }
+
+        Log::debug('[DuckDB Installer] Cleaning FFI header for compatibility.');
+
+        $content = file_get_contents($path);
+
+        // 1. Remove #include lines
+        $content = preg_replace('/^#include\s+.*$/m', '', $content);
+
+        // 2. Remove DUCKDB_*_API macro usage
+        $content = preg_replace('/DUCKDB_[A-Z_]*API/', '', $content);
+        $content = str_replace('DUCKDB_API', '', $content);
+
+        // 3. Remove extern "C" blocks and C++ guards
+        $content = preg_replace('/#ifdef\s+__cplusplus\s+extern\s+"C"\s+\{\s+#endif/s', '', $content);
+        $content = preg_replace('/#ifdef\s+__cplusplus\s+\}\s+#endif/s', '', $content);
+
+        // 4. Handle some common macros if they are still there
+        $content = preg_replace('/#if defined\(_WIN32\).*?#endif/s', '', $content);
+        
+        // 5. Add standard types if they were removed or are missing
+        $prefix = "typedef _Bool bool;\n";
+        $prefix .= "typedef char int8_t;\n";
+        $prefix .= "typedef short int16_t;\n";
+        $prefix .= "typedef int int32_t;\n";
+        $prefix .= "typedef long long int64_t;\n";
+        $prefix .= "typedef unsigned char uint8_t;\n";
+        $prefix .= "typedef unsigned short uint16_t;\n";
+        $prefix .= "typedef unsigned int uint32_t;\n";
+        $prefix .= "typedef unsigned long long uint64_t;\n\n";
+
+        file_put_contents($path, $prefix . $content);
     }
 
     protected function libraryDownloadUrl(): string

@@ -5,7 +5,7 @@ namespace LaravelDuckDB\Tests\Unit;
 use LaravelDuckDB\DuckDBConnection;
 use LaravelDuckDB\Tests\TestCase;
 use Mockery;
-use Saturio\DuckDB\DuckDB;
+use LaravelDuckDB\Internal\DuckDB;
 use ReflectionMethod;
 
 class ConnectionTest extends TestCase

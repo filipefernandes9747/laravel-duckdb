@@ -217,6 +217,49 @@ class DuckDBInstallerTest extends TestCase
         $this->assertSame('hello world', file_get_contents($destFile));
     }
 
+    // -------------------------------------------------------------------------
+    // cleanHeader() — via reflection
+    // -------------------------------------------------------------------------
+
+    public function test_clean_header_removes_problematic_macros(): void
+    {
+        mkdir($this->tmpDir, 0755, true);
+        $headerFile = $this->tmpDir . DIRECTORY_SEPARATOR . DuckDBInstaller::HEADER_FILENAME;
+
+        $originalContent = <<<'C'
+#include <stdint.h>
+#include "other.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+DUCKDB_API void duckdb_open(const char *path, duckdb_database *out_database);
+
+#if defined(_WIN32)
+// Windows specific stuff
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+C;
+        file_put_contents($headerFile, $originalContent);
+
+        $installer = new DuckDBInstaller($this->tmpDir, '1.2.1');
+        $method    = new ReflectionMethod(DuckDBInstaller::class, 'cleanHeader');
+        $method->setAccessible(true);
+        $method->invoke($installer);
+
+        $cleanedContent = file_get_contents($headerFile);
+
+        $this->assertStringNotContainsString('#include', $cleanedContent);
+        $this->assertStringNotContainsString('DUCKDB_API', $cleanedContent);
+        $this->assertStringNotContainsString('extern "C"', $cleanedContent);
+        $this->assertStringNotContainsString('#if defined(_WIN32)', $cleanedContent);
+        $this->assertStringContainsString('void duckdb_open', $cleanedContent);
+    }
+
     public function test_download_file_throws_on_invalid_url(): void
     {
         mkdir($this->tmpDir, 0755, true);

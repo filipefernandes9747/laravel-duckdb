@@ -4,9 +4,8 @@ namespace LaravelDuckDB;
 
 use Illuminate\Database\Connectors\Connector;
 use Illuminate\Database\Connectors\ConnectorInterface;
-use Saturio\DuckDB\DuckDB;
-
-use Saturio\DuckDB\DB\Configuration;
+use LaravelDuckDB\Internal\DuckDB;
+use LaravelDuckDB\Internal\DB\Configuration;
 
 class DuckDBConnector extends Connector implements ConnectorInterface
 {
@@ -14,12 +13,10 @@ class DuckDBConnector extends Connector implements ConnectorInterface
      * Establish a database connection.
      *
      * @param  array  $config
-     * @return \Saturio\DuckDB\DuckDB
+     * @return \LaravelDuckDB\Internal\DuckDB
      */
     public function connect(array $config)
     {
-        // $path = $config['database'] ?? ':memory:';
-        
         $path = $config['database'] ?? ':memory:';
 
         if ($path === ':memory:') {
@@ -41,7 +38,6 @@ class DuckDBConnector extends Connector implements ConnectorInterface
             $configuration->set('access_mode', 'READ_ONLY');
         }
 
-        // Pass a config object (even if empty) to trigger openExt which handles errors better in the library logic
-        return DuckDB::create($path, $configuration);
+        return DuckDB::create($path);
     }
 }
