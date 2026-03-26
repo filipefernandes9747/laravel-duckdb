@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0](https://github.com/filipefernandes9747/laravel-duckdb/releases/tag/v1.1.0) (2026-03-26)
+
+### Features
+
+- remove dependency ([b7a2dbe](https://github.com/filipefernandes9747/laravel-duckdb/commit/b7a2dbe3da2c1cbec53fe910e0420924effe3ad8))
+
+### Chores
+
+- **release:** 1.0.1 ([49b1d47](https://github.com/filipefernandes9747/laravel-duckdb/commit/49b1d47b12c08a8d5af9fea3f236aff59432b7c1))
 ## [1.0.1](https://github.com/filipefernandes9747/laravel-duckdb/releases/tag/v1.0.1) (2026-03-26)
 
 ### Features
